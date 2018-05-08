@@ -3,7 +3,6 @@ SYS_LEE equ 3
 SYS_PRINT equ 4
 STDIN equ 0
 STDOUT equ 1
-
 %macro print 2
   mov eax, 4
   mov ebx, 1
@@ -11,7 +10,6 @@ STDOUT equ 1
   mov edx, %2; La longitud de lo que se va a imprimir
   int 0x80
 %endmacro
-
 %macro input 2
   mov eax, 3
   mov ebx, 0
@@ -22,11 +20,9 @@ STDOUT equ 1
 
 segment .data
   msg1 db "La conjetura de Collatz, ingrese un numero y presione enter: ", 0xA,0xD
-  len1 equ $- msg1
-  
+  len1 equ $- msg1  
   msg2 db " "
   len2 equ $- msg2
-  
   saltoLinea db 0xA,0xD
   lenSalto equ $- saltoLinea
 
@@ -55,28 +51,25 @@ _start:
     mov edx, 0; Para evitar resultados inesperados
     div edi;en eax esta el resultado en edx el residuo
     cmp edx, 0
-    jne es_impar
-    
-    jmp continua
+    jne es_impar  
+    jmp imprime
 
-    es_impar:
+  es_impar:
     mov eax, 3; Es la multiplicacion primero si es impar
     mov ecx, ebp; Se mueve a ecx el valor de 2
     mul ecx; Despues de esto en eax esta la multiplicacion 
     inc eax; El resultado se le suma 1
     
-    continua:
-
+    imprime:
     mov ebp, eax
-
     add eax, '0'
     mov [aux], eax
     print aux, 2
     print msg2, len2
     mov eax, ebp
-jmp ciclo    
+    jmp ciclo    
 
 salir:
   mov eax, SYS_SALIDA
-	xor ebx, ebx
-	int 0x80
+  xor ebx, ebx
+  int 0x80
